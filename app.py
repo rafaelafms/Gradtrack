@@ -5,7 +5,7 @@ import os
 
 # conexao com o banco de dados 'gradtrack'
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://flask_user:tcc@localhost:5432/gradtrack?client_encoding=utf8'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://gradtrack_n8vr_user:KnykSEUszpW4zdXvVZ6IyYgIY9wOmXlY@dpg-d1mmoobipnbc73c4ns8g-a.oregon-postgres.render.com/gradtrack_n8vr?client_encoding=utf8'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
