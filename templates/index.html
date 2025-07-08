@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<head>
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Personalizacao da pagina -->
+  <title>Home - GradTrack</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='icons/icone.svg') }}">
+</head>
+<body style="margin: 0;">
+  <div class="conteudo">
+    <div class="menu">
+      <div class="categoria-menu"><a style="color: black;" href="{{ url_for('index') }}">Home</a></div>
+      <div class="categoria-menu"><a href="{{ url_for('atividades') }}">Atividades Complementares</a></div>
+      <div class="categoria-menu"><a href="{{ url_for('comprovantes') }}">Meus Comprovantes</a></div>
+      <div class="categoria-menu"><a href="{{ url_for('calendario') }}">Prazos UFRJ</a></div>
+    </div>
+    <div class="row hero">
+      <div class="introdução">
+        <div class="titulo1">
+          BEM VINDO AO <div style="color: #019ae7;"> GRADTRACK </div>
+        </div>
+        <div class="texto">
+          Nosso principal objetivo é te auxiliar no acompanhamento do seu progresso no curso, deixando visível seu andamento no cumprimento das horas complementares e exibindo datas e prazos importantes da universidade
+        </div>
+      </div>
+    </div>
+    <div class="secao">
+      <div class="titulo-secao1">
+        <div class="subtitulo"> MONITORAMENTO </div>
+        <div class="titulo2"> ATIVIDADES QUE CREDITAM HORAS COMPLEMENTARES </div>
+        <div class="texto" style="font-size: 15px;">
+          Aqui você encontra o resumo de como realizar o cumprimento de suas horas complementares, tendo a clareza das atividades que podem ser realizadas, as horas que elas creditam e o comprovante necessário para sua aceitação.
+        </div>
+      </div>
+      <div class="carrossel-container">
+        <button class="scroll-btn left" onclick="scrollCarousel(-1)">
+          <img src="{{ url_for('static', filename='icons/left-arrow.svg') }}" style="cursor: pointer; width: 40px;">
+        </button>
+        <div class="carrossel" id="carrossel">
+          {% for atividade in atividades %}
+            <div class="card-atividade">
+              <div class="titulo3"> {{ atividade.nome }} </div>
+              <div class="texto-card">
+                Tempo mínimo: {{ atividade.minimo }} <br>
+                Tempo contado: {{ atividade.contado }} <br>
+                Máximo de horas: {{ atividade.maximo }} <br>
+                Comprovante: {{ atividade.comprovante }} <br>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="scroll-btn right" onclick="scrollCarousel(1)">
+          <img src="{{ url_for('static', filename='icons/right-arrow.svg') }}" style="cursor: pointer; width: 40px;">
+        </button>
+      </div>
+    </div>
+    <div class="secao">
+      <div class="titulo-secao2">
+        <div class="subtitulo"> PRAZOS </div>
+        <div class="titulo2"> ACOMPANHE AS DATAS E PRAZOS DA UFRJ </div>
+        <div class="texto" style="font-size: 15px;">
+          Lembre-se de checar regularmente as datas para realização das atividades referentes a universidade como: período de inscrição em disciplina, concordato de matrícula, retirada de CRID, entre outros.
+        </div>
+      </div>
+      <div class="container">
+        <div style="display: flex; justify-content: space-between;">
+          <span id="mesAno" class="mes-calendario"></span>
+          <div>
+            <img src="{{ url_for('static', filename='icons/left-arrow.svg') }}" onclick="mudarMes(-1)" style="cursor: pointer;">
+            <img src="{{ url_for('static', filename='icons/right-arrow.svg') }}" onclick="mudarMes(1)" style="cursor: pointer;">
+          </div>
+        </div>
+
+        <div class="calendario" id="calendario"></div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <script src="{{ url_for('static', filename='JavaScript/main.js') }}"></script>
+  <script>
+    const eventos = {{ eventos|tojson }};
+    const diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    let dataAtual = new Date();
+
+    function gerarCalendario(mes, ano) {
+      const container = document.getElementById('calendario');
+      const mesAno = document.getElementById('mesAno');
+      container.innerHTML = '';
+
+      const primeiroDia = new Date(ano, mes, 1);
+      const ultimoDia = new Date(ano, mes + 1, 0);
+      const inicio = primeiroDia.getDay();
+      const diasNoMes = ultimoDia.getDate();
+
+      mesAno.textContent = primeiroDia.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+
+      // Cabeçalho (dias da semana)
+      for (let i = 0; i < 7; i++) {
+        const th = document.createElement('div');
+        th.className = 'cabecalho';
+        th.textContent = diasSemana[i];
+        container.appendChild(th);
+      }
+
+      // Espaços em branco antes do dia 1
+      for (let i = 0; i < inicio; i++) {
+        const vazio = document.createElement('div');
+        container.appendChild(vazio);
+      }
+
+      // Dias do mês
+      for (let dia = 1; dia <= diasNoMes; dia++) {
+        const divDia = document.createElement('div');
+        divDia.className = 'dia';
+        divDia.innerHTML = `${dia}`;
+
+        const hoje = new Date();
+        const dataStr = `${ano}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        const eventosDoDia = eventos.filter(ev => ev.data === dataStr);
+
+        const hojeStr = hoje.toISOString().split('T')[0];
+
+        if (dataStr === hojeStr) {
+          divDia.classList.add('hoje');
+        }
+
+        eventosDoDia.forEach(ev => {
+          const el = document.createElement('div');
+          el.className = 'evento';
+          el.textContent = ev.titulo;
+          divDia.appendChild(el);
+        });
+
+        container.appendChild(divDia);
+      }
+    }
+
+    function mudarMes(offset) {
+      dataAtual.setMonth(dataAtual.getMonth() + offset);
+      gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+    });
+  </script>
+  
+</body>

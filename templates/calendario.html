@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+  <!-- Personalizacao da pagina -->
+  <title>Calendar - GradTrack</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='icons/icone.svg') }}">
+</head>
+<body style="margin: 0;">
+  <div class="conteudo">
+    <div class="menu">
+      <div class="categoria-menu"><a href="{{ url_for('index') }}">Home</a></div>
+      <div class="categoria-menu"><a href="{{ url_for('atividades') }}">Atividades Complementares</a></div>
+      <div class="categoria-menu"><a href="{{ url_for('comprovantes') }}">Meus Comprovantes</a></div>
+      <div class="categoria-menu"><a style="color: black;" href="{{ url_for('calendario') }}">Prazos UFRJ</a></div>
+    </div>
+    <div class="secao">
+      <div class="titulo-secao1">
+        <div class="subtitulo">
+          MEUS COMPROMISSOS
+        </div>
+        <div class="titulo2">
+          CALENDÁRIO
+        </div>
+        <div class="texto" style="font-size: 15px;">
+          Acesse os prazos e informações referentes ao seu curso e a universidade de forma rápida, visual e descomplicada
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div style="display: flex; justify-content: space-between;">
+        <span id="mesAno" class="mes-calendario"></span>
+        <div>
+          <img src="{{ url_for('static', filename='icons/left-arrow.svg') }}" onclick="mudarMes(-1)" style="cursor: pointer;">
+          <img src="{{ url_for('static', filename='icons/right-arrow.svg') }}" onclick="mudarMes(1)" style="cursor: pointer;">
+        </div>
+      </div>
+
+      <div class="calendario" id="calendario"></div>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <script>
+    const eventos = {{ eventos|tojson }};
+    const diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    let dataAtual = new Date();
+
+    function gerarCalendario(mes, ano) {
+      const container = document.getElementById('calendario');
+      const mesAno = document.getElementById('mesAno');
+      container.innerHTML = '';
+
+      const primeiroDia = new Date(ano, mes, 1);
+      const ultimoDia = new Date(ano, mes + 1, 0);
+      const inicio = primeiroDia.getDay();
+      const diasNoMes = ultimoDia.getDate();
+
+      mesAno.textContent = primeiroDia.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
+
+      // Cabeçalho (dias da semana)
+      for (let i = 0; i < 7; i++) {
+        const th = document.createElement('div');
+        th.className = 'cabecalho';
+        th.textContent = diasSemana[i];
+        container.appendChild(th);
+      }
+
+      // Espaços em branco antes do dia 1
+      for (let i = 0; i < inicio; i++) {
+        const vazio = document.createElement('div');
+        container.appendChild(vazio);
+      }
+
+      // Dias do mês
+      for (let dia = 1; dia <= diasNoMes; dia++) {
+        const divDia = document.createElement('div');
+        divDia.className = 'dia';
+        divDia.innerHTML = `${dia}`;
+
+        const hoje = new Date();
+        const dataStr = `${ano}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        const eventosDoDia = eventos.filter(ev => ev.data === dataStr);
+
+        const hojeStr = hoje.toISOString().split('T')[0];
+
+        if (dataStr === hojeStr) {
+          divDia.classList.add('hoje');
+        }
+
+        eventosDoDia.forEach(ev => {
+          const el = document.createElement('div');
+          el.className = 'evento';
+          el.textContent = ev.titulo;
+          divDia.appendChild(el);
+        });
+
+        container.appendChild(divDia);
+      }
+    }
+
+    function mudarMes(offset) {
+      dataAtual.setMonth(dataAtual.getMonth() + offset);
+      gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<head>
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+  <!-- Personalizacao da pagina -->
+  <title>Comprovantes - GradTrack</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='icons/icone.svg') }}">
+</head>
+<body style="margin: 0;">
+  <div class="conteudo" style="margin-bottom: 10rem;">
+    <div class="menu">
+      <div class="categoria-menu"><a href="{{ url_for('index') }}">Home</a></div>
+      <div class="categoria-menu"><a href="{{ url_for('atividades') }}">Atividades Complementares</a></div>
+      <div class="categoria-menu"><a  style="color: black;" href="{{ url_for('comprovantes') }}">Meus Comprovantes</a></div>
+      <div class="categoria-menu"><a href="{{ url_for('calendario') }}">Prazos UFRJ</a></div>
+    </div>
+    <div class="secao" style="margin-bottom: 3rem;">
+      <div class="titulo-secao1">
+        <div class="subtitulo"> MONITORAMENTO </div>
+        <div class="titulo2">MEUS COMPROVANTES
+        </div>
+        <div class="texto" style="font-size: 15px;">
+          Aqui você encontra o resumo das horas já cumpridas e os comprovantes previamente enviados, tendo a clareza do que já foi realizdo e entendendo como pode prosseguir com cada atividade
+        </div>
+      </div>
+    </div>
+    <div class="btn-upload" style="margin: 0;">
+      <button onclick="openUploadModal()"> upload de comprovante </button>
+    </div>
+
+    <div class="titulo-secao2">
+      
+      <div class="atividades-realizadas">
+        <div class="card-atividades-realizadas titulo3">
+          {{ ja_cumpridas }} horas já cumpridas
+        </div>
+        <div class="card-atividades-realizadas titulo3">
+          {{ nao_cumpridas }} horas a cumprir
+        </div>
+      </div>
+    </div>
+
+    {% for atividade in dados %}
+      <div class="secao" style="margin-top: 5rem; margin-bottom: 20px;">
+        <div class="titulo2" style="margin-left: 6rem; text-transform: uppercase;"> 
+          {{ atividade.nome }} - {{ atividade.total_horas }} Horas
+        </div>
+        <div class="comprovante-scroll" id="comprovante-scroll">
+          {% for comprovante in atividade.comprovantes %}
+            <div class="comprovante-atividade">
+              <div style="display: flex;flex-direction: column;justify-content: center;">
+                <div> 
+                  <a href="{{ url_for('static', filename=comprovante.arquivo_caminho) }}" target="_blank" class="texto-card">
+                    {{ comprovante.arquivo_nome }}
+                  </a>
+                </div>
+                <div class="titulo3" style="margin-bottom: 0;"> {{ comprovante.horas }} Horas </div>
+              </div>
+              <div class="check"><img src="{{ url_for('static', filename='icons/check.svg') }}"></div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% include 'footer.html' %}
+
+  <!-- Modal Upload-->
+  <div class="modal-upload" id="modalUpload">
+    <div class="modal-upload-conteudo">
+      <h2>Upload de Comprovante</h2>
+      <form id="receiptForm" enctype="multipart/form-data" method="post" action="/upload">
+        <div style="display: inline-block;">
+          <div class="form-group">
+            <div for="activitySelect" class="titulo-input">Atividade</div>
+            <select id="activitySelect" name="activitySelect" class="option" required >
+              <option value="">Selecione uma atividade</option>
+              <option value="1">Estágio</option>
+              <option value="2">Iniciação científica</option>
+              <option value="3">Ouvinte em palestra</option>
+              <option value="4">Apresentação de trabalhos em eventos científicos</option>
+              <option value="5">Participação em competições acadêmicas</option>
+              <option value="6">Premiação ou menção honrosa</option>
+              <option value="7">Participação em colegiados</option>
+              <option value="8">Comissões de trabalhos acadêmicos</option>
+              <option value="9">Mesário</option>
+              <option value="10">Membro de diretoria estudantil</option>
+              <option value="11">Membro EJCM</option>
+              <option value="12">Concelheiro ou diretor EJCM</option>
+              <option value="13">Organização de eventos</option>
+              <option value="14">Monitor no IC</option>
+              <option value="15">Monitor LCI/LIGs</option>
+              <option value="16">Trabalhos comunitários</option>
+              <option value="17">Intercâmbio acadêmico</option>
+              <option value="18">Cursos de na área da computação</option>
+              <option value="19">Cursos de idiomas</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <div for="newActivityHours" class="titulo-input">Horas cumpridas</div>
+            <input type="number" id="newActivityHours" name="newActivityHours"  class="option" min="0.5" step="0.5">
+          </div>
+
+          <div class="form-group">
+            <div for="receiptFile" class="titulo-input">Comprovante</div>
+            <div class="upload-area" id="dropArea">
+              <input type="file" id="receiptFile" name="receiptFile" accept=".jpg,.jpeg,.png,.pdf" class="file-input" required>
+              <div class="upload-icon">📄</div>
+              <p id="uploadText">Selecione seu comprovante</p>
+              <p class="file-types">Tipos aceitos: JPG, PNG, PDF (max 5MB)</p>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">enviar atividade</button>
+      </form>
+    </div>
+  </div>
+  
+  <script src="{{ url_for('static', filename='JavaScript/main.js') }}"></script>
+  <script>
+    /* Exibir o nome do arquivo selecionado para o upload */
+    document.getElementById('receiptFile').addEventListener('change', function () {
+      const fileInput = this;
+      const uploadText = document.getElementById('uploadText');
+
+      if (fileInput.files.length > 0) {
+        uploadText.innerHTML = `<p><strong>${fileInput.files[0].name}</strong></p>`;
+      }
+    });
+  </script>
+
+</body>
