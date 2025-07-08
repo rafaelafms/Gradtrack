@@ -1,0 +1,389 @@
+.body, html, button{
+    font-family: 'Quicksand';
+    background-color:#DDF2FF; 
+    --header-color:#000000;
+    --white: #ffffff;
+    --header-button:#fff4e0;
+    --weekdays-color: #247ba0;
+    --box-shadow: #cbd4c2;
+    --hover: #e8faed;
+    --current-day-color:#ffeaC1;
+    --modal-color: #fcf1dd;
+    --background-modal-color: #aaa;
+    --event-color: #ff2442;
+    --modal-event-color: #e8f4fa;
+    --color-day:#fdf8ed;
+    --text-color:#42484c;
+    --activity-card-color: #b9b9b9;
+    --baseboard-color: #035077;
+    --upload-button-color: #035077;
+    --text-menu-color: #6f7980;
+    --option-text-color: #333;
+}
+.conteudo{
+    margin: 0 76px;
+}
+.menu{
+    margin: 4rem;
+    display: flex;
+    cursor: pointer;
+}
+.categoria-menu a {
+    color: var(--text-menu-color);
+    text-decoration: none;    
+    display: inline;          
+    margin: 1rem;
+}
+.row{
+    display: flex;
+    flex-wrap: nowrap;
+    margin-top: calc(var(--bs-gutter-y) * -1);
+    margin-right: calc(var(--bs-gutter-x) * -.5);
+    margin-left: calc(var(--bs-gutter-x) * -.5);
+    padding: 0 1rem;
+}
+.hero {
+    justify-content: flex-start;
+    height: 80vh;
+    background-image: url('background.svg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-left: 5rem;
+}
+.introdução {
+    width: 30%;
+    margin-top: 5%;
+}
+
+/* Responsivo para dispositivos com largura de até 768px (ex: tablets e celulares) */
+@media (max-width: 768px) {
+    .introdução {
+        width: 100%;
+        margin-top: 10%;
+        text-align: center;
+    }
+    .hero {
+        background-image: none;
+        padding: 0;
+    }
+}
+
+.titulo1{
+    font-size: 40px;
+    font-weight: 700;
+    margin: 2rem 0;
+}
+.titulo2{
+    font-weight: 700; 
+    font-size: 30px; 
+    margin: 20px 0;
+}
+.titulo3{
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 22px;
+}
+.titulo-secao1{
+    width: 35%;
+    text-align: center;
+    margin: 150px auto;
+}
+.titulo-secao2{
+    margin: 150px 6rem;
+}
+.subtitulo{
+    font-weight: 700; 
+    font-size: 18px; 
+    color: var(--text-color); 
+    letter-spacing: 4px;
+}
+.texto{
+    font-size: 18px;
+    color: var(--text-color);
+}
+.secao{
+    margin: 200px auto; 
+}
+.carrossel-container{
+    position: relative;
+    width: 90%;
+    margin: auto;
+    overflow: hidden;
+}
+.carrossel {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 1rem;
+}
+.carrossel::-webkit-scrollbar {
+    display: none;
+}
+.scroll-btn {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 35%;
+    background: none;
+    cursor: pointer;
+    padding: 0 10px;
+}
+.scroll-btn.left {
+    left: 0;
+}
+.scroll-btn.right {
+    right: 0;
+}
+.card-atividade{
+    margin: 0 2rem;
+    padding: 30px;
+    min-width: 40%;
+    border-color: var(--activity-card-color);
+    border-radius: 20px;
+    min-height: 240px;
+    align-content: center;
+    box-shadow: 2px 2px 6px rgb(0 0 0 / 15%);
+}
+.texto-card{
+    font-size: 18px;
+    color: var(--text-color);
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 2.2rem;
+    text-decoration: none;
+}
+.rodape{
+    margin: 10rem auto 0; 
+    justify-content:center;
+    background-color: var(--baseboard-color);
+    align-items: center;
+}
+.info-geral{
+    width: 25%; 
+    margin: 5rem;
+}
+.gradtrack-rodape{
+    color: var(--white); 
+    margin-top: 2rem; 
+    letter-spacing: 1px; 
+    line-height: 1.8rem; 
+    font-weight: 500;
+}
+.frentes-atuacao{
+    width: 30%; 
+    margin: 5rem;
+}
+.texto-rodape{
+    color: var(--white); 
+    margin-top: 1rem; 
+    letter-spacing: 1px; 
+    line-height: 1.8rem; 
+    font-weight: 400;
+}
+button {
+    width: 465px;
+    height: 70px;
+    cursor: pointer;
+    background-color: var(--upload-button-color);
+    margin: 2rem;
+    border-radius: 50px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 25px;
+    border: none;
+}
+.btn-upload{
+    text-align: center;
+}
+.info-importante{
+    margin: 6rem;
+}
+.atividades-container {
+    display: flex;
+    flex-direction: column;
+}
+.grupo {
+    display: none;
+    flex-wrap: wrap;
+}
+.btn-atividades{
+    background-color: unset;
+    color: var(--upload-button-color);
+    cursor: pointer;
+    text-decoration: underline;
+    margin: 2rem 0;
+    font-size: 25px;
+    text-align: center;
+}
+.comprovante-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    margin: 30px 4rem;
+    padding: 1rem 0;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+}
+.comprovante-atividade{
+    margin: 0 1rem;
+    padding: 30px;
+    max-width: 324px; 
+    min-width: 324px; 
+    background-color: var(--header-button);
+    border-radius: 40px;
+    display: flex; 
+    justify-content: space-between;
+}
+.check{
+    margin: auto 0;
+}
+
+/* Modal upload */ 
+.modal-upload {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    justify-content: center;
+    align-items: center;
+}
+.modal-upload-conteudo {
+    background-color: var(--modal-color);
+    padding: 20px;
+    border-radius: 20px;
+    width: 700px;
+    text-align: center;
+}
+.form-group{
+    margin: 1.5rem;
+    text-align: left;
+}
+.titulo-input{
+    margin: 10px 0;
+    font-weight: bold;
+}
+.option{
+    display: flex;
+    height: 55px;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 8px;
+    align-items: center;
+    background: var(--white);
+    border-style: hidden;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 15px;
+    color: var(--option-text-color);
+}
+.options .option:hover{
+    background: var(--white);
+}
+.upload-area {
+    position: relative;
+    margin-top: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    background-color: var(--white);
+    border-style: hidden;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+.upload-area:hover {
+    border-color: var(--primary);
+}
+.file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+.upload-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+.file-types {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-top: 0.5rem;
+}
+.atividades-realizadas{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+.card-atividades-realizadas{
+    width: 30%;
+    height: 100px;
+    background-color: var(--header-button);
+    margin: 2rem;
+    padding: 1rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Calendario */
+.calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-top: 1rem;
+}
+.dia {
+    width: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #fdf8ed;
+    margin: 5px;
+    box-shadow: 0px 0px 3px var(--box-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 5%;
+    min-height: 80px;
+}
+.hoje {
+    background-color:var(--current-day-color);
+}
+.cabecalho {
+    width: 100%;
+    display: flex;
+    color: var(--weekdays-color);
+    margin: 5px;
+}
+.cabecalho div {
+    width: 130px;
+    padding: 5px;
+}
+
+.evento {
+    background-color: #e7f4ff;
+    margin-top: 5px;
+    padding: 2px 8px;
+    font-size: 0.9em;
+    border-radius: 10px;
+}
+.container {
+    width: 1200px;
+    margin: auto;
+    display: grid;
+    justify-content: center;
+}
+.mes-calendario {
+    padding: 10px;
+    color: var(--header-color) ;
+    font-size: 26px;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: space-between;
+}
