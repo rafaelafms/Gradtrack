@@ -119,7 +119,7 @@ def comprovantes():
     atividades = Atividade.query.all()
     codificarAtividade(atividades)
     
-    ja_cumpridas = db.session.query(func.sum(Comprovante.horas)).scalar()
+    ja_cumpridas = db.session.query(func.sum(Comprovante.horas)).scalar() or 0
     nao_cumpridas = TOTAL_HORAS - ja_cumpridas
 
     subquery = (
