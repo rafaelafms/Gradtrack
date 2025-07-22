@@ -387,11 +387,3 @@ button {
     display: flex;
     justify-content: space-between;
 }
-@media (max-width: 768px) {
-    .dia{
-        width: 90px;
-    }
-    .container{
-        max-width: 1200px;
-    }
-}
